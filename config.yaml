@@ -1,6 +1,7 @@
 data:
   data_path: "/home/jupyter/Datasets/AnnotatedColorData/Images"
   val_size: 0.1
+  download: 1
 
 model:
   img_size: 256
