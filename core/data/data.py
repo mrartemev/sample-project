@@ -16,19 +16,19 @@ def get_datasets(config):
                                                 target_type='attr',
                                                 transform=get_transforms(config),
                                                 target_transform=None,
-                                                download=False)
+                                                download=config.data.download)
     test_dataset = torchvision.datasets.CelebA(root=config.data.data_path,
                                                 split='test',
                                                 target_type='attr',
                                                 transform=get_transforms(config),
                                                 target_transform=None,
-                                                download=False)
+                                                download=config.data.download)
     val_dataset = torchvision.datasets.CelebA(root=config.data.data_path,
                                                 split='valid',
                                                 target_type='attr',
                                                 transform=get_transforms(config),
                                                 target_transform=None,
-                                                download=False)
+                                                download=config.data.download)
     return train_dataset, test_dataset, val_dataset
 
 
