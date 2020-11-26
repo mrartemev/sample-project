@@ -1,0 +1,52 @@
+data:
+  data_path: "/home/jupyter/Datasets/AnnotatedColorData/Images"
+  val_size: 0.1
+
+model:
+  img_size: 256
+  max_features: 128
+  G:
+    conv_dim: 32
+    num_layers: 5
+  D:
+    conv_dim: 32
+    fc_dim: 512
+    num_layers: 5
+
+experiment:
+  losses:
+    G:
+      adversarial: 1
+      classification: 5
+      reconstruction: 10
+    D:
+      adversarial: 1
+      classification: 1
+      gradient_penalty: 10
+  model:
+    checkpoint_path: '.'
+  grad_clip: 10
+  epochs: 1000
+  batch_size: 8
+  n_atts: 40
+  lr:
+    G: 0.0001
+    D: 0.0005
+
+
+utils:
+  use_ddp: 0
+  device: "cuda:0"
+  num_workers: 4
+  save_interval: 10
+  sample_interval: 1
+  eval_interval: 5
+  log_iter_interval: 50
+  epoch_iters: 8000
+  tags: ''
+
+comet:
+  api_key: "gRPSBi6ZfMyOREfIgTbJQpg0F"
+  project_name: hairrecolor
+  workspace: mrartemev
+

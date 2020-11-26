@@ -1,0 +1,27 @@
+name: sample-project
+channels:
+  - pytorch
+  - defaults
+dependencies:
+  - numpy
+  - opencv
+  - pillow
+  - pip
+  - python=3.6
+  - pytorch=1.7
+  - torchvision
+  - pip:
+      - h5py
+      - scipy
+      - pyyaml
+      - omegaconf
+      - scikit-image
+      - scikit-learn
+      - dataclasses
+      - torchsummary
+      - pandas
+      - tqdm
+      - wandb
+      - hydra-core
+      - albumentations
+prefix: /home/user/anaconda3/envs/hairrecolor
