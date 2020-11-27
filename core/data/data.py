@@ -52,11 +52,11 @@ def get_loaders(config):
     )
     val_loader = data.DataLoader(
         dataset=val_dataset,
-        batch_size=1,
+        batch_size=config.experiment.batch_size,
         sampler=None,
-        num_workers=0,
+        num_workers=config.utils.num_workers,
         shuffle=True,
         pin_memory=True,
-        drop_last=False
+        drop_last=True
     )
     return train_loader, test_loader, val_loader
