@@ -3,12 +3,30 @@ import torchvision
 from torchvision.transforms import ToTensor, Normalize, Resize, Compose
 
 
+class InfiniteDataloader(data.DataLoader):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.dataset_iterator = super().__iter__()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            batch = next(self.dataset_iterator)
+        except StopIteration:
+            # Dataset exhausted, use a new fresh iterator.
+            self.dataset_iterator = super().__iter__()
+            batch = next(self.dataset_iterator)
+        return batch
+
 def get_transforms(config):
     return Compose([
         Resize((config.model.img_size, config.model.img_size)),
         ToTensor(),
         Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
     ])
+
 
 def get_datasets(config):
     train_dataset = torchvision.datasets.CelebA(root=config.data.data_path,
@@ -34,9 +52,10 @@ def get_datasets(config):
 
 def get_loaders(config):
     train_dataset, test_dataset, val_dataset = get_datasets(config)
-    train_loader = data.DataLoader(
+    train_loader = InfiniteDataloader(
         dataset=train_dataset,
         batch_size=config.experiment.batch_size,
+        sampler=data.DistributedSampler(train_dataset) if config.utils.use_ddp else None,
         num_workers=config.utils.num_workers,
         pin_memory=True,
         drop_last=True

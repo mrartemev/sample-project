@@ -7,7 +7,6 @@ import torch
 import torchvision.utils as vutils
 import torch.distributed as dist
 
-from .utils import InfiniteDataloader
 import torch.utils.data
 from .data import get_loaders
 from .metrics import calculate_fid
@@ -43,9 +42,6 @@ def train(gpu_num_if_use_ddp, config):
     if main_node:
         setup_experiment(config)
     train_dataloader, test_dataloader, val_dataloader = get_loaders(config)
-    train_dataloader = InfiniteDataloader(train_dataloader)
-    if config.utils.use_ddp:
-        train_dataloader.sampler = torch.utils.data.DistributedSampler(train_dataloader.dataset)
 
     trainer = Trainer(config)
 
