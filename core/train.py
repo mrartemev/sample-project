@@ -74,9 +74,9 @@ def train(gpu_num_if_use_ddp, config):
         log.info(f"Epoch {epoch} started")
         trainer.model.train()
         if config.utils.use_ddp:
-            train_dataloader.loader.sampler.set_epoch(epoch)
+            train_dataloader.sampler.set_epoch(epoch)
         for iteration in tqdm(range(config.utils.epoch_iters), desc='train loop', leave=False, position=0):
-            img_a, att_a = prepare_batch(train_dataloader.get_next())
+            img_a, att_a = prepare_batch(next(train_dataloader))
             if iteration == 0:
                 print(f"First batch of epoch {epoch} with shapes:"
                          f" image {img_a.shape},  att_a {att_a.shape}."

@@ -1,4 +1,5 @@
 import torch
+from torch.utils.data import DataLoader
 
 
 class DotDict(dict):
@@ -25,17 +26,22 @@ class DotDict(dict):
         target[key.split('.')[-1]] = value
 
 
-class InfiniteDataloader:
-    def __init__(self, loader):
-        self.loader = loader
-        self.iter = iter(self.loader)
+class InfiniteDataloader(DataLoader):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.dataset_iterator = super().__iter__()
 
-    def get_next(self):
+    def __iter__(self):
+        return self
+
+    def __next__(self):
         try:
-            return next(self.iter)
+            batch = next(self.dataset_iterator)
         except StopIteration:
-            self.iter = iter(self.loader)
-            return self.get_next()
+            # Dataset exhausted, use a new fresh iterator.
+            self.dataset_iterator = super().__iter__()
+            batch = next(self.dataset_iterator)
+        return batch
 
 
 class DDPWrapper(torch.nn.Module):
