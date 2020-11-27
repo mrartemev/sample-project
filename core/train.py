@@ -101,7 +101,7 @@ def train(gpu_num_if_use_ddp, config):
             trainer.save(os.path.join(os.getcwd(), 'checkpoint', 'weights.{:d}.pth'.format(epoch)))
             log.info(f"Model checkpointed to {os.path.join(os.getcwd(), 'checkpoint', 'weights.{:d}.pth'.format(epoch))}")
             # checkpoint_fid = calculate_fid(config, trainer.model, test_dataloader, dims=2048)
-            # wandb.log('checkpoint/FID', checkpoint_fid, step=epoch)
+            # wandb.log('checkpoint/FID', checkpoint_fid)
 
         if (epoch + 1) % config.utils.sample_interval == 0 and main_node:
             trainer.model.eval()
@@ -124,8 +124,8 @@ def train(gpu_num_if_use_ddp, config):
                     lossD.append(trainer.evaluate('D', img_a, att_a, tag='evaluation'))
                     lossG.append(trainer.evaluate('G', img_a, att_a, tag='evaluation'))
             for key in lossD[0].keys():
-                wandb.log(key, np.mean([i[key] for i in lossD]), step=epoch)
+                wandb.log(key, np.mean([i[key] for i in lossD]))
             for key in lossG[0].keys():
-                wandb.log(key, np.mean([i[key] for i in lossG]), step=epoch)
+                wandb.log(key, np.mean([i[key] for i in lossG]))
             log.info(f"Validation after epoch {epoch} finished")
     log.info("Training finished")
