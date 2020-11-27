@@ -21,8 +21,7 @@ log = logging.getLogger(__name__)
 def setup_experiment(config):
     wandb.login()
     wandb.init(project="sample-project",
-               config=OmegaConf.to_container(config, resolve=True)
-               )
+               config=OmegaConf.to_container(config, resolve=True))
 
 
 def train(gpu_num_if_use_ddp, config):
@@ -72,8 +71,6 @@ def train(gpu_num_if_use_ddp, config):
     for epoch in range(0, config.experiment.epochs):
         log.info(f"Epoch {epoch} started")
         trainer.model.train()
-        if config.utils.use_ddp:
-            train_dataloader.sampler.set_epoch(epoch)
         for iteration in tqdm(range(config.utils.epoch_iters), desc='train loop', leave=False, position=0):
             img_a, att_a = prepare_batch(next(train_dataloader))
             if iteration == 0:

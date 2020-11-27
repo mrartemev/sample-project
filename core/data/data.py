@@ -55,7 +55,6 @@ def get_loaders(config):
     train_loader = InfiniteDataloader(
         dataset=train_dataset,
         batch_size=config.experiment.batch_size,
-        sampler=data.DistributedSampler(train_dataset) if config.utils.use_ddp else None,
         num_workers=config.utils.num_workers,
         pin_memory=True,
         drop_last=True
