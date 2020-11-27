@@ -27,3 +27,4 @@ One can use a DDP setup by using *utils.use_ddp=1*. In this case there will be c
 
 Here we decided to use a simple pytorch dataloader, without `torch.utils.data.DistributedSampler`.
 Because of that, the overall time would not decrease by using DDP, rather the batch size would be virtually increased
+
