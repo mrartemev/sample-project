@@ -38,14 +38,12 @@ def get_loaders(config):
         dataset=train_dataset,
         batch_size=config.experiment.batch_size,
         num_workers=config.utils.num_workers,
-        sampler=data.DistributedSampler(train_dataset) if config.utils.use_ddp else None,
         pin_memory=True,
         drop_last=True
     )
     test_loader = data.DataLoader(
         dataset=test_dataset,
         batch_size=config.experiment.batch_size,
-        sampler=None,
         num_workers=config.utils.num_workers,
         pin_memory=True,
         drop_last=True
@@ -53,7 +51,6 @@ def get_loaders(config):
     val_loader = data.DataLoader(
         dataset=val_dataset,
         batch_size=config.experiment.batch_size,
-        sampler=None,
         num_workers=config.utils.num_workers,
         shuffle=True,
         pin_memory=True,
