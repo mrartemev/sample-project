@@ -119,9 +119,7 @@ def train(gpu_num_if_use_ddp, config):
                 with torch.no_grad():
                     lossD.append(trainer.evaluate('D', img_a, att_a, tag='evaluation'))
                     lossG.append(trainer.evaluate('G', img_a, att_a, tag='evaluation'))
-            for key in lossD[0].keys():
-                wandb.log(key, np.mean([i[key] for i in lossD]))
-            for key in lossG[0].keys():
-                wandb.log(key, np.mean([i[key] for i in lossG]))
+            wandb.log({key: np.mean([i[key] for i in lossD]) for key in lossD[0].keys()})
+            wandb.log({key: np.mean([i[key] for i in lossD]) for key in lossG[0].keys()})
             log.info(f"Validation after epoch {epoch} finished")
     log.info("Training finished")
